@@ -24,7 +24,7 @@ function csvToJson(inputFile = "input.csv", outputFile = "output.json", verbose 
       process.exit(1);
     }
 
-    // processing data rows
+    // processes data rows
     const result = rows.slice(1).map((row, index) => {
       const values = row.split(",");
       if (values.length !== 3) {
