@@ -13,6 +13,7 @@ function twoSumOptimised(nums, target) {
     return [];
 }
 
-console.log(twoSumOptimised([2,7,11,15], 9));
-console.log(twoSumOptimised([3,2,4], 6));
-console.log(twoSumOptimised([3,3], 6));
+// Example usage:
+console.log(twoSumOptimised([2,7,11,15], 9));   // [ 0, 1 ]
+console.log(twoSumOptimised([3,2,4], 6));       // [ 1, 2 ]
+console.log(twoSumOptimised([3,3], 6));         // [ 0, 1 ]
