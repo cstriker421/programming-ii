@@ -1,18 +1,14 @@
-export function groupByCity(users, cityMap = new Map(), index = 0) {
-    if (index >= users.length) return cityMap;
+export function groupByCity(users) {
+    return users.reduce((cityMap, user) => {
+      const { city } = user;
+      if (!cityMap.has(city)) {
+        cityMap.set(city, []);
+      }
+      cityMap.get(city).push(user);
+      return cityMap;
+    }, new Map());
+}
   
-    const user = users[index];
-    const { city } = user;
-  
-    if (!cityMap.has(city)) {
-      cityMap.set(city, []);
-    }
-  
-    cityMap.get(city).push(user);
-  
-    return groupByCity(users, cityMap, index + 1);
-  }  
-
 // chat gpt example input
 const users = [
     { id: 1, name: 'Alice', city: 'Paris' },
