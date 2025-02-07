@@ -1,20 +1,37 @@
-function findDuplicates(arr) {
-    let seen = new Map();
-    let duplicates = new Set();
+console.time("Run time");
 
-    for (let num of arr) {
-        if (seen.has(num)) {
-            duplicates.add(num);
-        } else {
-            seen.set(num, true);
-        }
-    }
+export function createFibonacci() {
+  const cache = new Map();
 
-    return Array.from(duplicates);
+  return function fibonacci(n) {
+    if (n <= 0) return 0;
+    if (n === 1) return 1;
+    if (cache.has(n)) return cache.get(n);
+
+    const result = fibonacci(n - 1) + fibonacci(n - 2);
+    cache.set(n, result);
+    return result;
+  };
 }
 
-// Example usage:
-console.log(findDuplicates([1, 2, 3, 4, 5, 2, 3, 6, 7, 8, 1]));
-console.log(findDuplicates([10, 20, 30, 40, 50, 10, 20]));
-console.log(findDuplicates([5, 5, 5, 5, 5]));
-console.log(findDuplicates([1, 2, 3, 4]));
+const fibonacci = createFibonacci();
+console.time("1st Fib")
+console.log(fibonacci(0));  //0 (to be expected)
+console.timeEnd("1st Fib")
+console.time("2nd Fib")
+console.log(fibonacci(1));  //1 (ditto)
+console.timeEnd("2nd Fib")
+console.time("3rd Fib")
+console.log(fibonacci(10)); //55
+console.timeEnd("3rd Fib")
+console.time("4th Fib")
+console.log(fibonacci(20)); //6765
+console.timeEnd("4th Fib")
+console.time("5th Fib")
+console.log(fibonacci(30)); // 832040
+console.timeEnd("5th Fib")
+console.time("6th Fib")
+console.log(fibonacci(50)); // 12586269025
+console.timeEnd("6th Fib")
+
+console.timeEnd("Run time");
