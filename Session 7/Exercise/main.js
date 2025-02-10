@@ -1,20 +1,43 @@
-function findDuplicates(arr) {
-    let seen = new Map();
-    let duplicates = new Set();
+import { writeFile } from 'fs';
 
-    for (let num of arr) {
-        if (seen.has(num)) {
-            duplicates.add(num);
-        } else {
-            seen.set(num, true);
+const API_KEY = '387320aba377a04228f1963886c713f4';
+const cities = ['London', 'New York', 'Tokyo'];
+
+async function fetchWeather(city) {
+    try {
+        const response = await fetch(
+            `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${API_KEY}`
+        );
+
+        if (!response.ok) {
+            throw new Error(`Error fetching ${city}: ${response.statusText}`);
         }
-    }
 
-    return Array.from(duplicates);
+        const data = await response.json();
+        return {
+            city: city,
+            temp: data.main.temp,
+            humidity: data.main.humidity
+        };
+    } catch (error) {
+        console.error(error.message);
+        return null;
+    }
 }
 
-// Example usage:
-console.log(findDuplicates([1, 2, 3, 4, 5, 2, 3, 6, 7, 8, 1]));
-console.log(findDuplicates([10, 20, 30, 40, 50, 10, 20]));
-console.log(findDuplicates([5, 5, 5, 5, 5]));
-console.log(findDuplicates([1, 2, 3, 4]));
+async function getWeatherData() {
+    const results = await Promise.all(cities.map(fetchWeather));
+    const filteredResults = results.filter((entry) => entry !== null);
+
+    writeFile('weather.json', JSON.stringify(filteredResults, null, 2), (err) => {
+        if (err) {
+            console.error('Error writing to file:', err);
+        } 
+        
+        else {
+            console.log('Weather data saved to weather.json');
+        }
+    });
+}
+
+getWeatherData();

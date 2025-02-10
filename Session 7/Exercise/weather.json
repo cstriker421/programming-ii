@@ -1,0 +1,20 @@
+[
+  {
+    "city": "London",
+    "temp": 2.4,
+    "humidity": 91
+  },
+  {
+    "city": "New York",
+    "temp": 3.16,
+    "humidity": 43
+  },
+  {
+    "city": "Tokyo",
+    "temp": 2.76,
+    "humidity": 55
+  }
+]
+// measurement taken at 20:46 on February 10th 2025 verified with Open Weather
+// humidity either spot on or off by 1%, and temps were usually rounded up, but accurate
+// you saw it too, Jorge :^)
