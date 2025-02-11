@@ -1,90 +1,125 @@
-import https from 'https';
-import fs from 'fs';
-import zlib from 'zlib';
-import readline from 'readline';
+import fs from "fs";
+import https from "https";
+import zlib from "zlib";
 
-const URL = 'https://bulk.openweathermap.org/snapshot/weather_14.json.gz?appid=387320aba377a04228f1963886c713f4';
-const ZIP_FILE = 'weather_data.json.gz';
-const JSON_FILE = 'weather_data.json';
+const URL = "https://bulk.openweathermap.org/sample/weather_14.json.gz";
+const GZ_FILE = "weather_14.json.gz";
+const JSON_FILE = "weather_14.json";
+const FIXED_JSON = "fixed_weather.json";
+const kToC = (kelvin) => (kelvin - 273.15).toFixed(1);
 
-function downloadFile(url, outputPath) {
-    return new Promise((resolve, reject) => {
-        https.get(url, response => {
-            if (response.statusCode !== 200) {
-                reject(new Error(`HTTP Error: ${response.statusCode}`));
-                return;
-            }
-            if (response.headers['content-type'] !== 'application/gzip') {
-                reject(new Error('Invalid file format (not gzip)'));
-                return;
-            }
-            const file = fs.createWriteStream(outputPath);
-            response.pipe(file);
-            file.on('finish', () => file.close(resolve));
-        }).on('error', reject);
+const getOrdinal = (num) => {
+    if (num === 1) return "1st";
+    if (num === 2) return "2nd";
+    if (num === 3) return "3rd";
+    return `${num}th`;
+};
+
+// check if file exists and is less than 1 hour old
+const isFresh = (file) => {
+    if (!fs.existsSync(file)) return false;
+    const stats = fs.statSync(file);
+    return (Date.now() - stats.mtimeMs) < 3600000; // 1 hour in ms
+};
+
+const downloadFile = (url, dest, callback) => {
+    console.log("Downloading latest weather data...");
+    const file = fs.createWriteStream(dest);
+    https.get(url, (response) => {
+        response.pipe(file);
+        file.on("finish", () => {
+            file.close(callback);
+        });
+    }).on("error", (err) => {
+        fs.unlink(dest, () => {}); // deletes partial file
+        console.error("Download error:", err.message);
     });
-}
+};
 
-function extractGzip(inputPath, outputPath) {
-    return new Promise((resolve, reject) => {
-        const unzip = zlib.createGunzip();
-        const input = fs.createReadStream(inputPath);
-        const output = fs.createWriteStream(outputPath);
-        input.pipe(unzip).pipe(output);
-        output.on('finish', resolve);
-        output.on('error', reject);
+const extractGzip = (input, output, callback) => {
+    console.log("Extracting weather data...");
+    const readStream = fs.createReadStream(input);
+    const writeStream = fs.createWriteStream(output);
+    const gunzip = zlib.createGunzip();
+
+    readStream.pipe(gunzip).pipe(writeStream).on("finish", callback).on("error", (err) => {
+        console.error("Extraction error:", err.message);
     });
-}
+};
 
-function processWeatherData(criteria) {
-    const data = JSON.parse(fs.readFileSync(JSON_FILE, 'utf8'));
-    const cities = data.map(entry => ({
-        name: entry.city.name,
-        temp: entry.main.temp,
-        humidity: entry.main.humidity
-    }));
+const fixJson = (input, output) => {
+    console.log("🛠 Fixing JSON format...");
+    try {
+        const rawData = fs.readFileSync(input, "utf-8");
+        const fixedJson = rawData
+            .trim()
+            .split("\n")
+            .map(line => JSON.parse(line));
+        fs.writeFileSync(output, JSON.stringify(fixedJson, null, 2));
+        console.log("JSON successfully fixed.");
+    } catch (error) {
+        console.error("JSON Fixing Error:", error.message);
+    }
+};
 
-    let sortedCities;
-    switch (criteria) {
-        case 'coldest':
-            sortedCities = cities.sort((a, b) => a.temp - b.temp);
-            break;
-        case 'warmest':
-            sortedCities = cities.sort((a, b) => b.temp - a.temp);
-            break;
-        case 'wettest':
-            sortedCities = cities.sort((a, b) => b.humidity - a.humidity);
-            break;
-        case 'driest':
-            sortedCities = cities.sort((a, b) => a.humidity - b.humidity);
-            break;
+const getTop3Cities = (category) => {
+    if (!fs.existsSync(FIXED_JSON)) {
+        console.error("No valid weather data found. Run the script to download first.");
+        return;
+    }
+    
+    const data = JSON.parse(fs.readFileSync(FIXED_JSON, "utf-8"));
+
+    let key, ascending;
+    switch (category) {
+        case "coldest": key = "temp"; ascending = true; break;
+        case "warmest": key = "temp"; ascending = false; break;
+        case "wettest": key = "humidity"; ascending = false; break;
+        case "driest": key = "humidity"; ascending = true; break;
         default:
-            console.log('Invalid criteria. Please enter: coldest, warmest, wettest, or driest.');
+            console.error("Invalid category. Choose: coldest, warmest, wettest, driest.");
             return;
     }
 
-    console.log(`Top 3 ${criteria} cities:`);
-    console.log(sortedCities.slice(0, 3));
+    // sort data
+    const top3 = data.map(entry => ({
+        rank: "", // placeholder for ranking
+        city: entry.city.name,
+        temp: kToC(entry.main.temp),
+        humidity: entry.main.humidity
+    }))
+    .sort((a, b) => ascending ? a[key] - b[key] : b[key] - a[key])
+    .slice(0, 3)
+    .reverse(); // reverse so 1st is at the bottom for proper ranking
+
+    // assign ranks dynamically
+    top3.forEach((entry, index) => {
+        entry.rank = getOrdinal(top3.length - index);
+    });
+
+    console.log(`Top 3 ${category} cities:`);
+    console.table(top3, ["rank", "city", "temp", "humidity"]);
+};
+
+//
+if (!isFresh(FIXED_JSON)) {
+    console.log("Data is outdated or missing. Fetching new data...");
+    downloadFile(URL, GZ_FILE, () => {
+        extractGzip(GZ_FILE, JSON_FILE, () => {
+            fixJson(JSON_FILE, FIXED_JSON);
+            runUserQuery(); //
+        });
+    });
+} else {
+    console.log("Data is fresh. No need to redownload.");
+    runUserQuery();
 }
 
-async function main() {
-    if (!fs.existsSync(JSON_FILE)) {
-        console.log('Downloading weather data...');
-        await downloadFile(URL, ZIP_FILE);
-        console.log('Extracting data...');
-        await extractGzip(ZIP_FILE, JSON_FILE);
-        console.log('Data ready.');
+function runUserQuery() {
+    const category = process.argv[2]; //
+    if (!category) {
+        console.error("No category specified. Usage: node script.js <coldest|warmest|wettest|driest>");
+        return;
     }
-
-    const rl = readline.createInterface({
-        input: process.stdin,
-        output: process.stdout
-    });
-
-    rl.question('Enter query (coldest, warmest, wettest, driest): ', criteria => {
-        processWeatherData(criteria.trim().toLowerCase());
-        rl.close();
-    });
+    getTop3Cities(category);
 }
-
-main().catch(err => console.error('Error:', err));
