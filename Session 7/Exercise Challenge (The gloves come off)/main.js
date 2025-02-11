@@ -48,7 +48,7 @@ const extractGzip = (input, output, callback) => {
 };
 
 const fixJson = (input, output) => {
-    console.log("🛠 Fixing JSON format...");
+    console.log("Fixing JSON format...");
     try {
         const rawData = fs.readFileSync(input, "utf-8");
         const fixedJson = rawData
