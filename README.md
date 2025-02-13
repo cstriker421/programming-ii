@@ -443,8 +443,6 @@ const CITIES = ['London', 'Paris', 'Tokyo'];
 - API endpoint: https://api.openweathermap.org/data/2.5/weather?q={city}&units=metric&appid={API_KEY}.
 - Extract temp and humidity from the response.
 
-
-
 ## Session 8: Problem-Solving Patterns (Advanced)
 
 **Goal:** Solve complex problems using dynamic programming and greedy algorithms.
@@ -702,7 +700,7 @@ Create a Cat class that overrides speak() to return "Meow!".
 **Challenge: (Optional)**
 Add a static method info() to Animal that returns "I am an animal class."
 
-## Session 3: Iterators and Generators
+## Session 12: Iterators and Generators
 
 Goal: Master custom iteration and generator functions.
 
@@ -1021,7 +1019,7 @@ Build a CLI for a TODO app. Save all interactions on a file
 
 ## Sessions 18 and 19: CLI Project
 
-Goal: Build a CLI tool that interacts with a public API (no authentication required) to solve a real-world problem.
+Goal: Build a CLI tool that interacts with a public API (no authentication recommended) defined [here](https://github.com/public-apis/public-apis) to solve a real-world problem.
 
 ### Project Overview
 
