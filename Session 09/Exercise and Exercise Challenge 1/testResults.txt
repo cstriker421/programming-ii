@@ -1,0 +1,7 @@
+=== Word Counter Test Results ===
+Passed
+Failed (Expected 5, got 6)
+Passed
+Passed
+Passed
+=== All tests completed! ===

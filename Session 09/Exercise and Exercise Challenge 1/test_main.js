@@ -16,10 +16,10 @@ function logResult(message) {
 logResult('=== Word Counter Test Results ===');
 
 const tests = [
-    { file: 'poem.txt', content: 'Roses are red, violets are blue.', expected: 6 },
-    { file: 'test1.txt', content: 'Hello world! This is a test.', expected: 5 },
-    { file: 'test2.txt', content: '  Hello   world    again!  ', expected: 3 },
-    { file: 'test3.txt', content: '', expected: 0 }
+    { file: 'poem.txt', content: 'Roses are red, violets are blue.', expected: 6 }, // 6
+    { file: 'test1.txt', content: 'Hello world! This is a test.', expected: 5 },    // it finds 6, and I don't have a clue why
+    { file: 'test2.txt', content: '  Hello   world    again!  ', expected: 3 },     // 3
+    { file: 'test3.txt', content: '', expected: 0 }                                 // 0
 ];
 
 for (const { file, content, expected } of tests) {

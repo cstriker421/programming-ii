@@ -1,0 +1,10 @@
+Main differences:
+let and const are not initialised before declaration. Accessing hoistedVar before its declaration throws a ReferenceError instead of undefined.
+
+Arrow functions assigned to const are also not hoisted. notHoistedFunc() results in a reference error because const does not allow hoisting.
+
+Function declarations remain fully hoisted, as hoistedFunc() works the same way as in the original hoisting.js file.
+
+In general, var should be avoided due to its unpredictable behaviour with hoisting and instead use let and const to enforce stricter variable scoping and prevent hoisting-related errors.
+
+The function declarations remain hoisted, so they can be safely called before their definition.

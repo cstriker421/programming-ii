@@ -1,0 +1,5 @@
+The var variables are hoisted but initialised as undefined. Its declaration var hoistedVar is moved to the top, but its assignment happens later, so console.log(hoistedVar); prints undefined.
+
+Function expressions assigned to var are hoisted as undefined, as notHoistedFunc is declared at the top but holds undefined until the assignment. Calling it before assignment causes: Error: notHoistedFunc is not a function.
+
+Function declarations are fully hoisted; hoistedFunc() is called before its declaration, but since function declarations are fully hoisted, it works fine.
