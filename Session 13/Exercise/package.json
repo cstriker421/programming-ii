@@ -1,0 +1,26 @@
+{
+    "name": "cli",
+    "version": "0.1.0",
+    "description": "My first CLI Tool",
+    "main": "src/main.js",
+    "scripts": {
+        "test": "jest",
+        "start": "node src/main.js"
+    },
+    "keywords": [
+        "cli",
+        "tool",
+        "demo"
+    ],
+    "author": "Giulio Davolio Marani <cstriker421@gmail.com>",
+    "license": "MIT",
+    "devDependencies": {
+        "jest": "^29.7.0"
+    },
+    "dependencies": {
+        "chalk": "^5.4.1",
+        "fs": "^0.0.1-security",
+        "winston": "^3.17.0",
+        "yargs": "^17.7.2"
+    }
+}
