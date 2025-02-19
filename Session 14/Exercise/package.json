@@ -1,0 +1,22 @@
+{
+  "name": "basic-mum-exercise",
+  "version": "1.0.0",
+  "main": "main.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "keywords": [
+    "math",
+    "utilities",
+    "sum",
+    "average",
+    "median"
+  ],
+  "author": "Giulio Davolio Marani",
+  "license": "ISC",
+  "description": "A basic math utility module that provides sum, average, and median functions.",
+  "type": "module",
+  "devDependencies": {
+    "jest": "^29.7.0"
+  }
+}

@@ -1,20 +1,5 @@
-function findDuplicates(arr) {
-    let seen = new Map();
-    let duplicates = new Set();
+import { sum } from "./src/sum.js";
+import { average } from "./src/average.js";
+import { median } from "./src/median.js";
 
-    for (let num of arr) {
-        if (seen.has(num)) {
-            duplicates.add(num);
-        } else {
-            seen.set(num, true);
-        }
-    }
-
-    return Array.from(duplicates);
-}
-
-// Example usage:
-console.log(findDuplicates([1, 2, 3, 4, 5, 2, 3, 6, 7, 8, 1]));
-console.log(findDuplicates([10, 20, 30, 40, 50, 10, 20]));
-console.log(findDuplicates([5, 5, 5, 5, 5]));
-console.log(findDuplicates([1, 2, 3, 4]));
+export { sum, average, median };
