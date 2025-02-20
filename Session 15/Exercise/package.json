@@ -1,0 +1,16 @@
+{
+  "name": "streamproject",
+  "version": "1.0.0",
+  "description": "Basic data streamer.",
+  "main": "main.js",
+  "type": "module",
+  "scripts": {
+    "start": "node main.js"
+  },
+  "keywords": [
+    "stream",
+    "data"
+  ],
+  "author": "Giulio",
+  "license": "ISC"
+}
