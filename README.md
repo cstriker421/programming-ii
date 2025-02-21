@@ -847,7 +847,6 @@ npm start
 
 - Export functions using ES modules.
 - Write JSDoc comments.
-- Publish to npm (or a private registry).
 
 **Hints:**
 
@@ -879,20 +878,20 @@ Goal: Process large datasets efficiently using streams and buffers.
 #### Step 1: Read File with Stream
 ```javascript
 // stream.js
-import { createReadStream } from 'fs';  
-const stream = createReadStream('largefile.txt', 'utf-8');  
-stream.on('data', chunk => console.log('Chunk:', chunk.length));  
+import { createReadStream } from 'fs';
+export function start(file) {
+  const stream = createReadStream(file, 'utf-8');  
+  stream.on('data', chunk => console.log('Chunk:', chunk.length));
+}
 ```
 
 #### Step 2: Transform Stream
 ```javascript
-import { Transform } from 'stream';  
-const uppercaseTransform = new Transform({  
-  transform(chunk, encoding, callback) {  
-    this.push(chunk.toString().toUpperCase());  
-    callback();  
-  }  
-});  
+import { start } from 'stream';
+
+console.log("Starting Process...");
+start();
+console.log("Finished!!!");
 ```
 ### 3. Exercise: Log File Analyzer
 
@@ -911,7 +910,7 @@ Sample Log Line:
 **Hints:**
 
 - Split lines with \n.
-- Use readline module for line-by-line processing.
+- Use `readline` module for line-by-line processing.
 
 ## Session 16: Testing & TDD with Jest
 
@@ -928,6 +927,15 @@ Goal: Write tests and adopt test-driven development (TDD).
 - [Jest](https://jestjs.io/docs/getting-started)
 
 ### 2. Tutorial
+#### Step 0: Add Jest script to `package.json`
+```json
+...
+"scripts": {
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js"
+}
+...
+```
+
 #### Step 1: Write a Test
 ```javascript
 // sum.test.js  
@@ -1027,41 +1035,40 @@ Goal: Build a CLI tool that interacts with a public API (no authentication recom
 
 ### Project Requirements (20 Points)
 1. API Selection (2 Points)
-    1.1: Choose an API from the Public APIs List that does not require authentication.
-    1.2: Justify your choice in the README.md (e.g., why this API is interesting or useful).
+  - 1.1: Choose an API from the Public APIs List that does not require authentication.
+  - 1.2: Justify your choice in the README.md (e.g., why this API is interesting or useful).
 
 2. CLI Functionality (5 Points)
-    2.1: Fetch data from at least one endpoint of the chosen API.
-    2.2: Process the data (e.g., filter, sort, or transform it).
-    2.3: Display the results in a user-friendly format (e.g., table, JSON, or plain text).
-    2.4: Accept command-line arguments/flags (e.g., --sort, --filter, --output).
-    2.5: Provide a --help flag to display usage instructions.
+  - 2.1: Fetch data from at least one endpoint of the chosen API.
+  - 2.2: Process the data (e.g., filter, sort, or transform it).
+  - 2.3: Display the results in a user-friendly format (e.g., table, JSON, or plain text).
+  - 2.4: Accept command-line arguments/flags (e.g., --sort, --filter, --output).
+  - 2.5: Provide a --help flag to display usage instructions.
 
 3. Code Quality (4 Points)
-    3.1: Use ES6+ features (e.g., const, let, arrow functions, destructuring).
-    3.2: Modularize code into reusable functions/classes.
-    3.3: Use a linter (e.g., ESLint) with a standard config (e.g., Airbnb).
-    3.4: Handle errors gracefully (e.g., invalid API responses, network issues).
+  - 3.1: Use ES6+ features (e.g., const, let, arrow functions, destructuring, import/export).
+  - 3.2: Modularize code into reusable functions/classes.
+  - 3.3: Handle errors gracefully (e.g., invalid API responses, network issues).
 
 4. Documentation (3 Points)
-    4.1: Write a detailed README.md with:
-        Installation instructions.
-        Usage examples.
-        API endpoint documentation.
-    4.2: Add JSDoc comments for all functions/classes.
-    4.3: Include a CHANGELOG.md for version history.
+  - 4.1: Write a detailed README.md with:
+         Installation instructions.
+         Usage examples.
+         API endpoint documentation.
+  - 4.2: Add JSDoc comments for all functions/classes.
+  - 4.3: Include a CHANGELOG.md for version history.
 
 5. Testing (3 Points)
-    5.1: Write unit tests for core functionality (e.g., data processing).
-    5.2: Mock API responses for testing (e.g., using nock or jest.mock).
-    5.3: Achieve at least 80% test coverage.
+  - 5.1: Write unit tests for core functionality (e.g., data processing).
+  - 5.2: Mock API responses for testing (e.g., using nock or jest.mock).
+  - 5.3: Achieve at least 80% test coverage.
 
 6. Git & Version Control (2 Points)
-    6.1: Use Git for version control with meaningful commit messages.
-    6.2: Tag releases (e.g., v1.0.0) following semantic versioning.
+  - 6.1: Use Git for version control with meaningful commit messages.
+  - 6.2: Tag releases (e.g., 1.0.0) following semantic versioning.
 
 7. Bonus Features (1 Point)
-    7.1: Add a creative feature (e.g., save results to a file, support multiple output formats).
+  - 7.1: Add a creative feature (e.g., save results to a file, support multiple output formats or integrate multiple apis).
 
 #### Example Project: Weather CLI Tool
 API: OpenWeatherMap (Free tier, no auth required).
