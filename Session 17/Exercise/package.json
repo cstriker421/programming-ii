@@ -1,0 +1,17 @@
+{
+  "name": "todo_manager",
+  "version": "1.0.0",
+  "description": "Basic CLI tool used for marking tasks down",
+  "main": "src/main.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "CLI",
+    "TODO",
+    "agenda"
+  ],
+  "author": "Giulio Davolio Marani",
+  "license": "MIT"
+}
