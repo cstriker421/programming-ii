@@ -1,0 +1,28 @@
+{
+  "name": "animal_facts_and_pictures_generator",
+  "version": "1.0.0",
+  "description": "A CLI tool to fetch and manage facts about cats and dogs, and to fetch images of cats, dogs, and foxes.",
+  "main": "main.js",
+  "type": "module",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "start": "node main.js",
+    "test": "jest"
+  },
+  "dependencies": {
+    "commander": "^10.0.0",
+    "node-fetch": "^3.3.2"
+  },
+  "keywords": [
+    "cat",
+    "dog",
+    "fox",
+    "images",
+    "facts",
+    "fetcher"
+  ],
+  "author": "Giulio Davolio Marani",
+  "license": "MIT"
+}

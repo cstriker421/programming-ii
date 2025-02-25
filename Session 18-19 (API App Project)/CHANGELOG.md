@@ -1,0 +1,7 @@
+# Fun Animal Facts and Pictures
+## Version 0.1.0 ##
+- Set up the first base file directory and files (README and CHANGELOG)
+
+## Version 0.2.0 ##
+- Set up .test.js file and main.js file
+- Written first draft of main.js
