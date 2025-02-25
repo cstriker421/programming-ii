@@ -51,7 +51,8 @@ for (let result = iterator3.next(); !result.done; result = iterator3.next()) {
 }
 console.log("\n");
 
-// method 4 uses yield* to delegate to an array; it's more concise than previous method, as it directly delegates to an array, making the code cleaner, but it's STILL memory hungry and inflexible
+// method 4 uses yield* to delegate to an array; it's more concise than previous method, as it directly delegates to an array, making the code cleaner
+// still very memory hungry and inflexible
 function* evenNumbers4() {
     yield* [2, 4, 6];
 }

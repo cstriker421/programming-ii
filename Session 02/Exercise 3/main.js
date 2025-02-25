@@ -1,18 +1,18 @@
-function twoSumOptimised(nums, target) {
-    let numMap = new Map();
-
-    for (let i = 0; i < nums.length; i++) {
-        let complement = target - nums[i];
-
-        if (numMap.has(complement)) {
-            return [numMap.get(complement), i];
+function containsDuplicate(nums) {
+    let seen = new Set();
+    for (let num of nums) {
+        if (seen.has(num)) {
+            return true; // Found duplicate
         }
-
-        numMap.set(nums[i], i);
+        seen.add(num); // Store unique numbers
     }
-    return [];
+    return false; // No duplicates found
 }
 
-console.log(twoSumOptimised([2,7,11,15], 9));
-console.log(twoSumOptimised([3,2,4], 6));
-console.log(twoSumOptimised([3,3], 6));
+/*  seen = new Set(); => Uses a Set to store unique numbers (O(1) insert/search).
+    If num is in seen, it returns true (O(1) lookup).
+    Otherwise, it adds num to seen.
+    It returns false if no duplicates are found.
+
+    It is an O(n) function because we loop through nums once, and because we store up to n elements.
+*/

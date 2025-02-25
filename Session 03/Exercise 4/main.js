@@ -1,29 +1,32 @@
-class Student {
-    constructor(name, grades) {
-        this.name = name;
-        this.grades = grades; // (0-20 scale)
-    }
+/*
+    Why is Fibonacci Recursive O(2^n)?
 
-    calculateFinalGrade() {
-        if (this.grades.length === 0) return 0;
-        const sum = this.grades.reduce((acc, grade) => acc + grade, 0);
-        return (sum / this.grades.length).toFixed(2);
-    }
+    Each Fibonacci number is calculated recursively as:
+    F(n) = F(n-1) + F(n-2)
+   
+    This means each function call spawns two new recursive calls.
+    F(5) calls F(4) and F(3)
+    F(4) calls F(3) and F(2), etc.
 
-    displayInfo() {
-        console.log(`Student: ${this.name}`);
-        console.log(`Grades: ${this.grades.join(", ")}`);
-        console.log(`Final Grade: ${this.calculateFinalGrade()}`);
-    }
-}
+    The recursion forms a binary tree of function calls.
+    Each level of recursion approximately doubles the number of calls.
+    The depth of the recursion tree is `n`.
 
-// Example usage:
-const student1 = new Student("Janice", [18, 16, 20, 19, 17]);
-const student2 = new Student("Daniel", [12, 14, 10, 15, 13]);
-const student3 = new Student("Alex", [9, 7, 11, 6, 8]);
-const student4 = new Student("Trudy", [10, 11, 12, 13, 11]);
+    Total recursive calls
+    The number of calls follows T(n) = T(n-1) + T(n-2)
+    This grows exponentially, leading to O(2^n) complexity.
 
-student1.displayInfo();
-student2.displayInfo();
-student3.displayInfo();
-student4.displayInfo();
+Example Call Tree for fib(5):
+
+             fib(5)
+            /      \
+       fib(4)      fib(3)
+      /     \      /    \
+  fib(3)   fib(2) fib(2) fib(1)
+ /    \      |
+
+    Not how fib(2) and fib(1) are recomputed multiple times.
+
+    The optimised approach is memoisation (store computed values).
+    This is because it reduces time complexity to O(n).
+*/

@@ -1,20 +1,9 @@
-function findDuplicates(arr) {
-    let seen = new Map();
-    let duplicates = new Set();
-
-    for (let num of arr) {
-        if (seen.has(num)) {
-            duplicates.add(num);
-        } else {
-            seen.set(num, true);
-        }
-    }
-
-    return Array.from(duplicates);
+function power(x, n) {
+    if (n === 0) return 1;
+    if (n < 0) return 1 / power(x, -n);
+    return x * power(x, n - 1);
 }
 
-// Example usage:
-console.log(findDuplicates([1, 2, 3, 4, 5, 2, 3, 6, 7, 8, 1]));
-console.log(findDuplicates([10, 20, 30, 40, 50, 10, 20]));
-console.log(findDuplicates([5, 5, 5, 5, 5]));
-console.log(findDuplicates([1, 2, 3, 4]));
+// Sample inputs provided by Chat GPT
+console.log(power(2, 5));  // 32
+console.log(power(3, -2)); // 0.1111...

@@ -19,7 +19,7 @@ function towerOfHanoi(n, source, auxiliary, destination) {
 // input example:
 towerOfHanoi(5, 'A', 'B', 'C');
 
-// output:
+//  output:
 //  Move disk 1 from A to C
 //  Move disk 2 from A to B
 //  Move disk 1 from C to B

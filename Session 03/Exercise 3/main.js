@@ -1,18 +1,23 @@
-function twoSumOptimised(nums, target) {
-    let numMap = new Map();
-
-    for (let i = 0; i < nums.length; i++) {
-        let complement = target - nums[i];
-
-        if (numMap.has(complement)) {
-            return [numMap.get(complement), i];
-        }
-
-        numMap.set(nums[i], i);
+function getPermutations(str, prefix = "") {
+    if (str.length === 0) {
+        console.log(prefix);
+        return;
     }
-    return [];
+
+    for (let i = 0; i < str.length; i++) {
+        let remaining = str.slice(0, i) + str.slice(i + 1); // removes current character
+        getPermutations(remaining, prefix + str[i]);        // recurs with new string
+    }
 }
 
-console.log(twoSumOptimised([2,7,11,15], 9));
-console.log(twoSumOptimised([3,2,4], 6));
-console.log(twoSumOptimised([3,3], 6));
+getPermutations("abc");
+
+/*
+  Output:
+  abc
+  acb
+  bac
+  bca
+  cab
+  cba
+*/
