@@ -1,4 +1,5 @@
 import { loadStoredFacts } from "./storeFact.js";
+import chalk from "chalk";
 
 /**
  * Retrieves stored facts for a given animal.
@@ -10,10 +11,10 @@ export function getStoredFacts(animal) {
     const facts = data[animal] || []; // Gets relevant facts array
 
     if (!facts.length) {
-        return `No stored ${animal} facts found.`;
+        return chalk.yellow(`No stored ${animal} facts found.`);
     }
 
     const emoji = animal === "cat" ? "🐱" : "🐶";
-    return `${emoji} ${animal.toUpperCase()} FACTS:\n` + 
+    return chalk.blue(`${emoji} ${animal.toUpperCase()} FACTS:\n`) + 
            facts.map((fact, index) => `${index + 1}. ${fact}`).join("\n");
 }

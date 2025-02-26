@@ -1,4 +1,5 @@
 import fetch from "node-fetch";
+import chalk from "chalk";
 
 const CAT_FACTS_URL = "https://meowfacts.herokuapp.com/";
 const DOG_FACTS_URL = "https://dog-api.kinduff.com/api/facts";
@@ -18,7 +19,7 @@ export async function fetchFact(animal, count = 1) {
             const response = await fetch(url);
             const contentType = response.headers.get("content-type");
             if (!contentType || !contentType.includes("application/json")) {
-                console.error(`❌  Error fetching ${animal} facts: Received non-JSON response.`);
+                console.error(chalk.red(`❌  Error fetching ${animal} facts: Received non-JSON response.`));
                 return { rawFacts: [], formattedFacts: [] };
             }
             const data = await response.json();
@@ -32,7 +33,7 @@ export async function fetchFact(animal, count = 1) {
             formattedFacts: facts.map((fact, index) => `${animal === "cat" ? "🐱" : "🐶"} ${index + 1}. ${fact}`) // For display
         };
     } catch (error) {
-        console.error(`❌  Error fetching ${animal} facts:`, error.message);
+        console.error(chalk.red(`❌  Error fetching ${animal} facts:`, error.message));
         return { rawFacts: [], formattedFacts: [] };
     }
 }

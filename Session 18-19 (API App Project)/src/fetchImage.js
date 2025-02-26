@@ -1,5 +1,6 @@
 import fetch from "node-fetch";
 import open from "open";
+import chalk from "chalk";
 
 const CAT_IMAGE_URL = "https://api.thecatapi.com/v1/images/search";
 const DOG_IMAGE_URL = "https://random.dog/woof.json";
@@ -21,7 +22,7 @@ export async function fetchImage(animal, type = "static") {
 
     try {
         if (animal === "fox" && type === "animated") {
-            console.warn(`⚠️  No animated images available for foxes. Fetching a static fox image instead.\n`);
+            console.warn(chalk.yellow(`⚠️  No animated images available for foxes. Fetching a static fox image instead.\n`));
             type = "static"; // Override to fetch a static image
         }
 
@@ -35,11 +36,11 @@ export async function fetchImage(animal, type = "static") {
 
             // Allowed file extensions
             const staticExtensions = [".JPG", ".jpg", ".jpeg", ".png"];
-            const animatedExtensions = [".gif", ".mp4"];
+            const animatedExtensions = [".gif", ".mp4", ".webm"];
 
             // Condition for if only static images are allowed (`--image`)
             if (type === "static" && staticExtensions.some(ext => imageURL.endsWith(ext))) {
-                console.log(`${emoji} Opening a ${animal} image: ${imageURL}`);
+                console.log(chalk.blue(`${emoji} Opening a ${animal} image: ${imageURL}`));
                 await open(imageURL);
                 return;
             }
@@ -48,15 +49,15 @@ export async function fetchImage(animal, type = "static") {
             if (type === "animated" && (staticExtensions.some(ext => imageURL.endsWith(ext)) ||
                                         animatedExtensions.some(ext => imageURL.endsWith(ext)))) {
                 const isAnimated = animatedExtensions.some(ext => imageURL.endsWith(ext));
-                console.log(`${emoji} Opening a ${animal} ${isAnimated ? "animated image" : "image"}: ${imageURL}`);
+                console.log(chalk.blue(`${emoji} Opening a ${animal} ${isAnimated ? "animated image" : "image"}: ${imageURL}`));
                 await open(imageURL);
                 return;
             }
 
             // Console warning if the file type is incorrect, that then tries fetching a new image
-            console.warn(`⚠️  Unexpected file format: ${imageURL}. Fetching another...`);
+            console.warn(chalk.yellow(`⚠️  Unexpected file format: ${imageURL}. Fetching another...`));
         }
     } catch (error) {
-        console.error(`❌  Error fetching ${animal} image:`, error.message);
+        console.error(chalk.red(`❌  Error fetching ${animal} image:`, error.message));
     }
 }
