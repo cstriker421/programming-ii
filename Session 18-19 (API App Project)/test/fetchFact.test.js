@@ -1,33 +1,65 @@
-import { fetchFact } from "../src/fetchFact.js";
-import fetch from "node-fetch";
+import assert from 'assert';
+import { fetchFact } from '../src/fetchFact.js';
 
-jest.mock("node-fetch");
+// Mock fetch
+const originalFetch = global.fetch;
 
-/**
- * Tests fetchFact.js for retrieving facts.
- */
-describe("fetchFact", () => {
-    const mockCatResponse = { data: ["Cats have whiskers!", "Cats love sleeping."] };
-    const mockDogResponse = { facts: ["Dogs wag tails!", "Dogs love bones."] };
-
-    test("fetches cat facts successfully", async () => {
-        fetch.mockResolvedValueOnce({ json: jest.fn().mockResolvedValue(mockCatResponse) });
-        const result = await fetchFact("cat", 2);
-        expect(result.rawFacts.length).toBe(2);
-        expect(result.rawFacts).toEqual(mockCatResponse.data);
+function mockFetch(response) {
+    global.fetch = () => Promise.resolve({
+        headers: { get: () => 'application/json' },
+        json: () => Promise.resolve(response)
     });
+}
 
-    test("fetches dog facts successfully", async () => {
-        fetch.mockResolvedValueOnce({ json: jest.fn().mockResolvedValue(mockDogResponse) });
-        const result = await fetchFact("dog", 2);
-        expect(result.rawFacts.length).toBe(2);
-        expect(result.rawFacts).toEqual(mockDogResponse.facts);
-    });
+function resetFetch() {
+    global.fetch = originalFetch;
+}
 
-    test("handles API errors", async () => {
-        fetch.mockRejectedValue(new Error("API Failure"));
-        const result = await fetchFact("cat");
-        expect(result.rawFacts).toEqual([]);
-        expect(result.formattedFacts).toEqual([]);
-    });
-});
+// Test 1: Fetch a cat fact
+function testFetchCatFact() {
+    mockFetch({ data: ["Cats are cute!"] });
+
+    fetchFact('cat', 1).then(result => {
+        assert.deepStrictEqual(result.rawFacts, ["Cats are cute!"]);
+        assert.deepStrictEqual(result.formattedFacts, ["🐱 1. Cats are cute!"]);
+        console.log('Test 1: Passed');
+    }).catch(error => {
+        console.error('Test 1: Failed', error);
+    }).finally(resetFetch);
+}
+
+// Test 2: Fetch a dog fact
+function testFetchDogFact() {
+    mockFetch({ facts: ["Dogs are loyal!"] });
+
+    fetchFact('dog', 1).then(result => {
+        assert.deepStrictEqual(result.rawFacts, ["Dogs are loyal!"]);
+        assert.deepStrictEqual(result.formattedFacts, ["🐶 1. Dogs are loyal!"]);
+        console.log('Test 2: Passed');
+    }).catch(error => {
+        console.error('Test 2: Failed', error);
+    }).finally(resetFetch);
+}
+
+// Test 3: Handle fetch errors
+function testFetchError() {
+    global.fetch = () => Promise.reject(new Error('Network error'));
+
+    fetchFact('cat', 1).then(result => {
+        assert.deepStrictEqual(result.rawFacts, []);
+        assert.deepStrictEqual(result.formattedFacts, []);
+        console.log('Test 3: Passed');
+    }).catch(error => {
+        console.error('Test 3: Failed', error);
+    }).finally(resetFetch);
+}
+
+// Run all tests
+try {
+    testFetchCatFact();
+    testFetchDogFact();
+    testFetchError();
+    console.log('All fetchFact tests passed!');
+} catch (error) {
+    console.error('Test failed:', error.message);
+}

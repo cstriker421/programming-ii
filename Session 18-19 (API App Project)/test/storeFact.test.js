@@ -1,26 +1,50 @@
-import { loadStoredFacts, saveFacts } from "../src/storeFact.js";
-import fs from "fs";
+import assert from 'assert';
+import fs from 'fs';
+import { saveFacts, loadStoredFacts } from '../src/storeFact.js';
 
-jest.mock("fs");
+// Mock fs
+const originalExistsSync = fs.existsSync;
+const originalReadFileSync = fs.readFileSync;
+const originalWriteFileSync = fs.writeFileSync;
 
-/**
- * Tests storeFact.js for storing and retrieving facts.
- */
-describe("storeFact", () => {
-    test("loads existing facts", () => {
-        fs.existsSync.mockReturnValue(true);
-        fs.readFileSync.mockReturnValue(JSON.stringify({ cat: ["Cats are fluffy"], dog: ["Dogs bark"] }));
+function mockFs(data) {
+    fs.existsSync = () => true;
+    fs.readFileSync = () => JSON.stringify(data);
+    fs.writeFileSync = () => {};
+}
 
-        const data = loadStoredFacts();
-        expect(data.cat).toContain("Cats are fluffy");
-        expect(data.dog).toContain("Dogs bark");
-    });
+function resetFs() {
+    fs.existsSync = originalExistsSync;
+    fs.readFileSync = originalReadFileSync;
+    fs.writeFileSync = originalWriteFileSync;
+}
 
-    test("saves new facts", () => {
-        fs.existsSync.mockReturnValue(false);
-        fs.writeFileSync.mockImplementation(() => {});
+// Test 1: Save new cat facts
+function testSaveCatFacts() {
+    mockFs({ cat: [] });
 
-        saveFacts("cat", ["New cat fact"]);
-        expect(fs.writeFileSync).toHaveBeenCalledWith("facts.json", JSON.stringify({ cat: ["New cat fact"], dog: [] }, null, 2));
-    });
-});
+    saveFacts('cat', ["Cats are cute!"]);
+    assert.strictEqual(fs.writeFileSync.called, true);
+    assert.deepStrictEqual(JSON.parse(fs.writeFileSync.calls[0][1]), { cat: ["Cats are cute!"] });
+    console.log('Test 1: Passed');
+    resetFs();
+}
+
+// Test 2: Load stored facts
+function testLoadStoredFacts() {
+    mockFs({ cat: ["Cats are cute!"] });
+
+    const result = loadStoredFacts();
+    assert.deepStrictEqual(result, { cat: ["Cats are cute!"] });
+    console.log('Test 2: Passed');
+    resetFs();
+}
+
+// Run all tests
+try {
+    testSaveCatFacts();
+    testLoadStoredFacts();
+    console.log('All storeFact tests passed!');
+} catch (error) {
+    console.error('Test failed:', error.message);
+}

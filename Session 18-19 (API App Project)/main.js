@@ -8,7 +8,8 @@ import { fetchImage } from "./src/fetchImage.js";
 // CLI setup
 program
   .option("--animal <type>", "Specify animal: cat, dog, or fox (fox only for images)")
-  .option("--random", "Fetch a single random fact (not available for foxes)")
+  .option("--anim", "Allow animated images (GIFs & MP4s)")
+  .option("--clear", "Clear stored facts (not available for foxes)")
   .option("--count <number>", "Fetch multiple facts (max: 3, not available for foxes)", (value) => {
     const parsed = parseFloat(value);
     if (isNaN(parsed) || !Number.isInteger(parsed) || parsed < 1) {
@@ -18,9 +19,8 @@ program
     return parsed;
   })
   .option("--image", "Fetch and open a random image")
-  .option("--anim", "Allow animated images (GIFs & MP4s)")
   .option("--list", "List stored facts (not available for foxes)")
-  .option("--clear", "Clear stored facts (not available for foxes)")
+  .option("--random", "Fetch a single random fact (not available for foxes)")
   .parse(process.argv);
 
 const options = program.opts();
@@ -28,7 +28,7 @@ const options = program.opts();
 // Normalises the animal input
 const animal = options.animal?.trim().toLowerCase();
 
-// **Restricts foxes from facts-related commands**
+// Restricts foxes from facts-related commands
 if (!animal || !["cat", "dog", "fox"].includes(animal)) {
   console.error("❌  Invalid or missing --animal option. Use --animal <cat|dog|fox>");
   process.exit(1);

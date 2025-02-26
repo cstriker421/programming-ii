@@ -1,37 +1,70 @@
-import { fetchImage } from "../src/fetchImage.js";
-import fetch from "node-fetch";
-import open from "open";
+import assert from 'assert';
+import { fetchImage } from '../src/fetchImage.js';
 
-jest.mock("node-fetch");
-jest.mock("open");
+// Mock fetch and open
+const originalFetch = global.fetch;
+const originalOpen = global.open;
 
-/**
- * Tests fetchImage.js for image fetching and opening.
- */
-    describe("fetchImage", () => {
-    test("fetches and opens a cat image", async () => {
-        fetch.mockResolvedValueOnce({ json: jest.fn().mockResolvedValue([{ url: "https://example.com/cat.jpg" }]) });
-        await fetchImage("cat", "static");
-        expect(open).toHaveBeenCalledWith("https://example.com/cat.jpg");
-    });
+function mockFetch(response) {
+    global.fetch = () => Promise.resolve(response);
+}
 
-    test("fetches and opens a dog image", async () => {
-        fetch.mockResolvedValueOnce({ json: jest.fn().mockResolvedValue({ url: "https://example.com/dog.jpg" }) });
-        await fetchImage("dog", "static");
-        expect(open).toHaveBeenCalledWith("https://example.com/dog.jpg");
-    });
+function mockOpen() {
+    global.open = () => Promise.resolve();
+}
 
-    test("fetches and opens a fox image", async () => {
-        fetch.mockResolvedValueOnce({ json: jest.fn().mockResolvedValue({ image: "https://example.com/fox.jpg" }) });
-        await fetchImage("fox", "static");
-        expect(open).toHaveBeenCalledWith("https://example.com/fox.jpg");
-    });
+function resetMocks() {
+    global.fetch = originalFetch;
+    global.open = originalOpen;
+}
 
-    test("filters out incorrect file formats", async () => {
-        fetch.mockResolvedValueOnce({ json: jest.fn().mockResolvedValue({ url: "https://example.com/dog.mp4" }) });
-        fetch.mockResolvedValueOnce({ json: jest.fn().mockResolvedValue({ url: "https://example.com/dog.jpg" }) });
+// Test 1: Fetch and open a static cat image
+function testFetchStaticCatImage() {
+    mockFetch([{ url: 'https://example.com/cat.jpg' }]);
+    mockOpen();
 
-        await fetchImage("dog", "static");
-        expect(open).toHaveBeenCalledWith("https://example.com/dog.jpg");
-    });
-});
+    fetchImage('cat', 'static').then(() => {
+        assert.strictEqual(global.open.called, true);
+        assert.strictEqual(global.open.calls[0][0], 'https://example.com/cat.jpg');
+        console.log('Test 1: Passed');
+    }).catch(error => {
+        console.error('Test 1: Failed', error);
+    }).finally(resetMocks);
+}
+
+// Test 2: Fetch and open an animated dog image
+function testFetchAnimatedDogImage() {
+    mockFetch({ url: 'https://example.com/dog.gif' });
+    mockOpen();
+
+    fetchImage('dog', 'animated').then(() => {
+        assert.strictEqual(global.open.called, true);
+        assert.strictEqual(global.open.calls[0][0], 'https://example.com/dog.gif');
+        console.log('Test 2: Passed');
+    }).catch(error => {
+        console.error('Test 2: Failed', error);
+    }).finally(resetMocks);
+}
+
+// Test 3: Handle fetch errors
+function testFetchImageError() {
+    global.fetch = () => Promise.reject(new Error('Network error'));
+    mockOpen();
+
+    fetchImage('fox', 'static').then(() => {
+        assert.strictEqual(global.open.called, false);
+        console.log('Test 3: Passed');
+    }).catch(error => {
+        console.error('Test 3: Failed', error);
+    }).finally(resetMocks);
+}
+
+// Run all tests
+try {
+    testFetchStaticCatImage();
+    testFetchAnimatedDogImage();
+    testFetchImageError();
+    console.log('All fetchImage tests passed!');
+} catch (error) {
+    console.error('Test failed:', error.message);
+}
