@@ -12,16 +12,15 @@ const DOG_FACTS_URL = "https://dog-api.kinduff.com/api/facts";
 export async function fetchFact(animal, count = 1) {
     const url = animal === "cat" ? CAT_FACTS_URL : DOG_FACTS_URL;
 
-    // Checks before fetching & show warning if count > 3
-    if (count > 3) {
-        console.warn(`⚠️  You requested ${count} facts, but the maximum allowed is 3. Only 3 facts will be fetched.\n`);
-        count = 3; // Enforce the limit
-    }
-
     try {
         let facts = [];
         while (facts.length < count) {
             const response = await fetch(url);
+            const contentType = response.headers.get("content-type");
+            if (!contentType || !contentType.includes("application/json")) {
+                console.error(`❌  Error fetching ${animal} facts: Received non-JSON response.`);
+                return { rawFacts: [], formattedFacts: [] };
+            }
             const data = await response.json();
             const newFacts = animal === "cat" ? data.data : data.facts;
             facts = [...facts, ...newFacts].slice(0, count);

@@ -12,3 +12,7 @@
 
 ## Version 0.2.2 ##
 - fetchFact.js, retrieveFacts.js, storeFact.js, all function properly and main.js handles them as intended
+
+## Version 0.3.0 ##
+- Added fetchImage.js to give image search capability 
+- Updated fetchFact.js, retrieveFact.js, and main.js to better handle errors regarding facts and API
