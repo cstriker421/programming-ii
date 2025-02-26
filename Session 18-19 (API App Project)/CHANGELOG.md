@@ -7,5 +7,8 @@
 - Written first draft of main.js
 
 ## Version 0.2.1 ##
-- Mostly completed main.js's CLI inputs
+- Mostly completed main.js's facts CLI inputs
 - Reworked all of the different src .js files. Currently debugging and fixing
+
+## Version 0.2.2 ##
+- fetchFact.js, retrieveFacts.js, storeFact.js, all function properly and main.js handles them as intended

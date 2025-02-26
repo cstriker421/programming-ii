@@ -1,4 +1,16 @@
 {
-  "cat": [],
-  "dog": []
+  "cat": [
+    "The ancestor of all domestic cats is the African Wild Cat which still exists today.",
+    "The Maine Coon is 4 to 5 times larger than the Singapura, the smallest breed of cat.",
+    "The ancestor of all domestic cats is the African Wild Cat which still exists today.",
+    "In 1987 cats overtook dogs as the number one pet in America.",
+    "Cats can not taste sweets.",
+    "The average cat food meal is the equivalent to about five mice."
+  ],
+  "dog": [
+    "The largest breed of dog is the Irish Wolfhound.",
+    "There are nearly 14,000 animal shelters and rescue groups across North America.",
+    "One unspayed female dog, her mate and their puppies can produce 67,000 puppies in six years.",
+    "Dogs DO have better low-light vision than humans because of a special light-reflecting layer behind their retinas."
+  ]
 }

@@ -11,7 +11,12 @@ const DOG_FACTS_URL = "https://dog-api.kinduff.com/api/facts";
  */
 export async function fetchFact(animal, count = 1) {
     const url = animal === "cat" ? CAT_FACTS_URL : DOG_FACTS_URL;
-    count = Math.min(count, 3); // Ensure max count is 3
+
+    // Checks before fetching & show warning if count > 3
+    if (count > 3) {
+        console.warn(`⚠️  You requested ${count} facts, but the maximum allowed is 3. Only 3 facts will be fetched.\n`);
+        count = 3; // Enforce the limit
+    }
 
     try {
         let facts = [];
@@ -21,9 +26,14 @@ export async function fetchFact(animal, count = 1) {
             const newFacts = animal === "cat" ? data.data : data.facts;
             facts = [...facts, ...newFacts].slice(0, count);
         }
-        return facts;
+
+        // Returns facts as an object: raw for saving, formatted for display
+        return {
+            rawFacts: facts, // For saving
+            formattedFacts: facts.map((fact, index) => `${animal === "cat" ? "🐱" : "🐶"} ${index + 1}. ${fact}`) // For display
+        };
     } catch (error) {
-        console.error(`Error fetching ${animal} facts:`, error.message);
-        return [];
+        console.error(`❌  Error fetching ${animal} facts:`, error.message);
+        return { rawFacts: [], formattedFacts: [] };
     }
 }
