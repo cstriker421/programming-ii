@@ -9,7 +9,7 @@
   },
   "scripts": {
     "start": "node main.js",
-    "test": "cross-env NODE_OPTIONS=--experimental-vm-modules jest --verbose"
+    "test": "node test/clearFacts.test.js"
   },
   "dependencies": {
     "commander": "^10.0.0",
@@ -17,17 +17,7 @@
     "open": "^10.1.0"
   },
   "devDependencies": {
-    "jest": "^29.7.0",
     "cross-env": "^7.0.3"
-  },
-  "jest": {
-    "transform": {},
-    "testMatch": ["**/test/**/*.test.mjs"],
-    "moduleFileExtensions": ["js", "mjs", "json"],
-    "moduleNameMapper": {
-      "^(\\.{1,2}/.*)\\.js$": "$1"
-    },
-    "testEnvironment": "node"
   },
   "keywords": [
     "cat",

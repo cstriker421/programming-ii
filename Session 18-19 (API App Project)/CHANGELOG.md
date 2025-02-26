@@ -19,3 +19,6 @@
 
 ## Version 0.3.1 ##
 - Updated test.mjs files; still non-functional
+
+## Vesrion 0.3.2 ##
+- Removed all Jest dependencies and testing methods to instead use built-in assert module from Node.js
