@@ -16,3 +16,6 @@
 ## Version 0.3.0 ##
 - Added fetchImage.js to give image search capability 
 - Updated fetchFact.js, retrieveFact.js, and main.js to better handle errors regarding facts and API
+
+## Version 0.3.1 ##
+- Updated test.mjs files; still non-functional

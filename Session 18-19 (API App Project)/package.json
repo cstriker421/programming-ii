@@ -9,12 +9,25 @@
   },
   "scripts": {
     "start": "node main.js",
-    "test": "jest"
+    "test": "cross-env NODE_OPTIONS=--experimental-vm-modules jest --verbose"
   },
   "dependencies": {
     "commander": "^10.0.0",
     "node-fetch": "^3.3.2",
     "open": "^10.1.0"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "cross-env": "^7.0.3"
+  },
+  "jest": {
+    "transform": {},
+    "testMatch": ["**/test/**/*.test.mjs"],
+    "moduleFileExtensions": ["js", "mjs", "json"],
+    "moduleNameMapper": {
+      "^(\\.{1,2}/.*)\\.js$": "$1"
+    },
+    "testEnvironment": "node"
   },
   "keywords": [
     "cat",
@@ -25,8 +38,5 @@
     "fetcher"
   ],
   "author": "Giulio Davolio Marani",
-  "license": "MIT",
-  "devDependencies": {
-    "jest": "^29.7.0"
-  }
+  "license": "MIT"
 }

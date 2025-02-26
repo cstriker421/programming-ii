@@ -6,8 +6,8 @@ import { loadStoredFacts } from "./storeFact.js";
  * @returns {string} - Formatted facts list or a message if empty.
  */
 export function getStoredFacts(animal) {
-    const data = loadStoredFacts(); // Load full storage object
-    const facts = data[animal] || []; // Get relevant facts array
+    const data = loadStoredFacts(); // Loads full storage object
+    const facts = data[animal] || []; // Gets relevant facts array
 
     if (!facts.length) {
         return `No stored ${animal} facts found.`;

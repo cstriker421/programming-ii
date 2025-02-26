@@ -25,7 +25,7 @@ program
 
 const options = program.opts();
 
-// Normalize the animal input
+// Normalises the animal input
 const animal = options.animal?.trim().toLowerCase();
 
 // **Restricts foxes from facts-related commands**
@@ -42,12 +42,12 @@ if (animal === "fox" && (options.random || options.count || options.list || opti
 
 const { random, count, list, clear, image, anim } = options;
 
-// **Handles Image Fetching (for cat, dog, fox)**
+// Handles image fetching (for cat, dog, fox)
 if (image) {
   fetchImage(animal, anim ? "animated" : "static");
 }
 
-// **Handles fact retrieval & management (cat & dog only)**
+// Handles fact retrieval & management (cat & dog only)
 else if (list) {
   console.log(getStoredFacts(animal));
 } else if (clear) {
@@ -56,7 +56,7 @@ else if (list) {
 } else if (random || count) {
   let fetchCount = count || 1; // Defaults to 1 if no count is specified
 
-  // **CHECK COUNT LIMIT HERE BEFORE FETCHING**
+  // Checks count limit before fetching
   if (fetchCount > 3) {
     console.warn(`⚠️  You requested ${fetchCount} facts, but the maximum allowed is 3. Only 3 facts will be fetched.\n`);
     fetchCount = 3;
