@@ -5,3 +5,7 @@
 ## Version 0.2.0 ##
 - Set up .test.js file and main.js file
 - Written first draft of main.js
+
+## Version 0.2.1 ##
+- Mostly completed main.js's CLI inputs
+- Reworked all of the different src .js files. Currently debugging and fixing
