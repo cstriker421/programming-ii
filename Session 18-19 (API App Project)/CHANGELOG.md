@@ -29,3 +29,6 @@
 ## Version 0.4.0 ##
 - Update fetchImage.js to include .webm files
 - Update main.js, fetchFact.js, fetchImage.js, and retrieveFact.js to use chalk
+
+## Version 1.0.0 ##
+- Release!
